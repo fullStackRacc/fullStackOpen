@@ -1,5 +1,11 @@
 import { useState } from 'react'
 
+const StatisticLine = ({ button, text }) => {
+  return (
+    <p>{text} {button}</p>
+  )
+}
+
 const Statistics = (props) => {
   const {good, neutral, bad, allClicks} = props
 
@@ -15,14 +21,20 @@ const Statistics = (props) => {
     return (
       <>
         <h2>Statistics:</h2>
-        <p>Good: {good}</p>
-        <p>Neutral: {neutral}</p>
-        <p>Bad: {bad}</p>
-        <p>Average Score: {(good * 1) + (neutral * 0) + (bad * -1)}</p>
-        <p>Percent Positive: {(good / (good + neutral + bad)) * 100}</p>
+        <StatisticLine button={good} text="Good:" />
+        <StatisticLine button={neutral} text="Neutral:" />
+        <StatisticLine button={bad} text="Bad:" />
+        <StatisticLine button={(good * 1) + (neutral * 0) + (bad * -1)} text="Average Score:" />
+        <StatisticLine button={(good / (good + neutral + bad)) * 100} text="Percent Positive:" />
       </>
     )
   }
+}
+
+const Button = ({ handleClick, text }) => {
+  return (
+    <button onClick={handleClick}>{text}</button>
+  )
 }
 
 const App = () => {
@@ -32,21 +44,27 @@ const App = () => {
   const [bad, setBad] = useState(0)
   const [allClicks, setAll] = useState([])
 
+  const handleGoodClick = () => {
+    setAll(allClicks.concat('G'))
+    setGood(good + 1)
+  }
+
+  const handleNeutralClick = () => {
+    setAll(allClicks.concat('N'))
+    setNeutral(neutral + 1)
+  }
+
+  const handleBadClick = () => {
+    setAll(allClicks.concat('B'))
+    setBad(bad + 1)
+  }
+
   return (
     <div>
       <h2>Give Feedback</h2>
-      <button onClick={() => {
-        setAll(allClicks.concat('G'))
-        setGood(good + 1)}
-      }>good</button>
-      <button onClick={() => {
-        setAll(allClicks.concat('N'))
-        setNeutral(neutral + 1)}
-      }>neutral</button>
-      <button onClick={() => {
-        setAll(allClicks.concat('B'))
-        setBad(bad + 1)}
-      }>bad</button>
+      <Button handleClick={handleGoodClick} text="Good" />
+      <Button handleClick={handleNeutralClick} text="Neutral" />
+      <Button handleClick={handleBadClick} text="Bad" />
       <hr />
       <Statistics 
         good = {good}
@@ -57,5 +75,6 @@ const App = () => {
     </div>
   )
 }
+
 
 export default App
