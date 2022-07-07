@@ -12,15 +12,26 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [votes, setVote] = useState([0, 0, 0, 0, 0, 0])
+
+  let change
 
   const randomButton = () => {
-    setSelected(Math.floor(Math.random() * 7))
+    change = () => Math.floor(Math.random() * anecdotes.length)
+    setSelected(change)
+  }
+
+  const voteButton = () => {
+    const votesCopy = [...votes]
+    votesCopy[selected] += 1
+    setVote(votesCopy)
   }
 
   return (
     <div>
-      {anecdotes[selected]}<br />
-      <button onClick={randomButton}>Random Anecdote</button>
+      <p>{anecdotes[selected]} has {votes[selected]} votes!</p><br />
+      <button onClick={randomButton}>Next Anecdote</button>
+      <button onClick={voteButton}>Vote</button>
     </div>
   )
 }
