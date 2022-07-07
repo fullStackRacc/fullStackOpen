@@ -1,6 +1,7 @@
 const Header = (props) => {
+    let name = props.name
     return (
-        <h1>{props.course}</h1>
+        <h1>{name}</h1>
     )
 }
 
