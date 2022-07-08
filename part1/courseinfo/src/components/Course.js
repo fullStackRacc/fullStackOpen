@@ -1,5 +1,3 @@
-import React from "react"
-
 const Header = ({ course }) => {
   return <h1>{course.name}</h1>
 }
@@ -23,7 +21,7 @@ const Content = ({ course }) => {
 }
 
 const Total = ({ course }) => {
-  const sum = course.parts.reduce((acc, c) => acc + c.exercises, 0)
+  const sum = course.parts.reduce((acc, c) => acc + c, 0)
 
   return <h4>Total of {sum} exercises</h4>
 }
@@ -38,4 +36,4 @@ const Course = ({ course }) => {
   )
 }
 
-export default Course;
+export default Course
