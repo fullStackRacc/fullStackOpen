@@ -1,12 +1,16 @@
 import { useState } from 'react'
+import Filter from "./components/Filter"
+import Form from "./components/Form"
+import List from "./components/List"
 
-const App = (props) => {
-  const [persons, setPersons] = useState([
+const App = () => {
+  const [persons, setPersons] = useState([])
+  const [allPersons, setAllPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
     { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
     { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ]) 
+  ])
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [search, setSearch] = useState('')
@@ -15,20 +19,22 @@ const App = (props) => {
     event.preventDefault()
     const nameObject = {
       name: newName,
-      date: new Date().toISOString(),
-      phoneNumber: newPhoneNumber,
-      important: Math.random() < 0.5,
-      id: persons.length + 1,
+      number: newPhoneNumber,
+      id: allPersons.length + 1,
     }
-    if (persons.find(element => element.name === nameObject.name)) {
+    console.log('checking for dupes')
+    if (allPersons.find(element => element.name === nameObject.name)) {
+      console.log('found dupe')
       alert(`${nameObject.name} already exists in phonebook!`)
     } 
     else {
-      setPersons(persons.concat(nameObject))
+      console.log('setting new person')
+      console.log(nameObject)
+      setAllPersons(allPersons.concat(nameObject))
+      console.log(allPersons)
     } 
     setNewName('')
     setNewPhoneNumber('')
-    console.log(persons)
   }
 
   const handleNameChange = (event) => {
@@ -41,50 +47,33 @@ const App = (props) => {
 
   const handleSearch = (event) => {
     setSearch(event.target.value)
+    const regex = new RegExp( search, 'i' );
+    const filteredPersons = () => allPersons.filter(person => person.name.match(regex))
+    setPersons(filteredPersons)
   }
-
-
-  const Person = (props) => {
-    return (
-      <li key={props.id}>{props.name}: {props.number}</li>
-    )
-  }
-
-  const namesToShow = search === "" 
-  ? persons
-  : persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase()))
-
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <p>filter shown with</p> <input 
-                          value={search}
-                          onChange={handleSearch}
-                        />
-      <form onSubmit={addName}>
-        <div>
-          name: <input 
-                  value={newName} 
-                  onChange={handleNameChange} 
-                /><br />
-          number: <input 
-                    value={newPhoneNumber} 
-                    onChange={handlePhoneNumberChange}
-                  />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Filter 
+        value={search} 
+        onChange={handleSearch} 
+      />
+      <h2>Add a new</h2>
+      <Form 
+        onSubmit={addName} 
+        newName={newName} 
+        handleNameChange={handleNameChange} 
+        newPhoneNumber={newPhoneNumber} 
+        handlePhoneNumberChange={handlePhoneNumberChange}
+      />
       <h2>Numbers</h2>
       <div>
+      <List 
+        allPersons={allPersons}
+        persons={persons}
+      />
       </div>
-      <ul>
-        {namesToShow.map(persons => 
-            <Person key={persons.id} name={persons.name} number={persons.number}  />
-        )}
-      </ul>
     </div>
   )
 }
