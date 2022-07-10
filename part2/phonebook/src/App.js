@@ -2,9 +2,12 @@ import { useState } from 'react'
 
 const App = (props) => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', 
+      phoneNumber: '(345) 126-7890'
+    }
   ]) 
   const [newName, setNewName] = useState('')
+  const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [showAll, setShowAll] = useState(true)
 
   const addName = (event) => {
@@ -12,6 +15,7 @@ const App = (props) => {
     const nameObject = {
       name: newName,
       date: new Date().toISOString(),
+      phoneNumber: newPhoneNumber,
       important: Math.random() < 0.5,
       id: persons.length + 1,
     }
@@ -22,18 +26,21 @@ const App = (props) => {
       setPersons(persons.concat(nameObject))
     } 
     setNewName('')
+    setNewPhoneNumber('')
     console.log(persons)
   }
 
   const handleNameChange = (event) => {
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
 
+  const handlePhoneNumberChange = (event) => {
+    setNewPhoneNumber(event.target.value)
+  }
+
   const Person = (props) => {
-    console.log(props)
     return (
-      <li key={props.id}>{props.name}</li>
+      <li key={props.id}>{props.name}: {props.number}</li>
     )
   }
 
@@ -46,7 +53,14 @@ const App = (props) => {
       <h2>Phonebook</h2>
       <form onSubmit={addName}>
         <div>
-          name: <input value={newName} onChange={handleNameChange} />
+          name: <input 
+                  value={newName} 
+                  onChange={handleNameChange} 
+                /><br />
+          number: <input 
+                    value={newPhoneNumber} 
+                    onChange={handlePhoneNumberChange}
+                  />
         </div>
         <div>
           <button type="submit">add</button>
@@ -60,7 +74,7 @@ const App = (props) => {
       </div>
       <ul>
         {namesToShow.map(persons => 
-            <Person key={persons.id} name={persons.name} />
+            <Person key={persons.id} name={persons.name} number={persons.phoneNumber}  />
         )}
       </ul>
     </div>
