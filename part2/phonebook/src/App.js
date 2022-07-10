@@ -15,7 +15,12 @@ const App = (props) => {
       important: Math.random() < 0.5,
       id: persons.length + 1,
     }
-    setPersons(persons.concat(nameObject))
+    if (persons.find(element => element.name === nameObject.name)) {
+      alert(`${nameObject.name} already exists in phonebook!`)
+    } 
+    else {
+      setPersons(persons.concat(nameObject))
+    } 
     setNewName('')
     console.log(persons)
   }
